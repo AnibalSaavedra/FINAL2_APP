@@ -1,17 +1,68 @@
+
 # -*- coding: utf-8 -*-
 # SISTEMA UNIFICADO: MBI 360° - RITUAL (app.py)
 # Autor: Aníbal Saavedra
 
-# ---- MODULO: Disociación o Trauma ----
-
-
-# ---- MODULO: Epigenético Emocional ----
-
-
-# ---- MODULO: Condiciones Clínicas ----
-
 import streamlit as st
 
+# ---- MODULO: Disociación o Trauma ----
+def ejecutar_test_disociacion():
+    st.title("🌀 MBI 360° – Módulo 1: Test de Disociación o Trauma")
+    st.markdown("Evalúa tu nivel de desconexión emocional y fragmentación del yo. Responde con sinceridad.")
+
+    preguntas = [
+        "Siento que a veces observo mi vida como si fuera una película.",
+        "Pierdo la noción del tiempo con frecuencia.",
+        "Me cuesta recordar etapas de mi infancia o adolescencia.",
+        "Siento que una parte de mí se ha apagado emocionalmente.",
+        "Tengo conductas que no logro controlar y no sé por qué las hago."
+    ]
+
+    respuestas = []
+    for i, pregunta in enumerate(preguntas):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            r = st.radio(pregunta, ["Nunca", "A veces", "Frecuentemente", "Casi siempre"], key=f"dis_{i}")
+        with col2:
+            with st.expander("❓"):
+                st.caption("Esta afirmación evalúa la percepción de separación entre tu conciencia y tus acciones o emociones.")
+        respuestas.append(r)
+
+    if st.button("✅ Finalizar evaluación de disociación"):
+        st.success("Gracias por completar este módulo. Tus respuestas han sido registradas.")
+
+# ---- MODULO: Epigenético Emocional ----
+def ejecutar_test_epigenetico():
+    st.title("🧬 MBI 360° – Módulo 2: Estado Epigenético Emocional")
+    st.markdown("Explora las huellas emocionales heredadas de tu linaje materno y paterno.")
+
+    lineas = {
+        "Línea Materna": [
+            ("Siento que debo cuidar o proteger a todos.", "Puede provenir de mujeres cuidadoras o sacrificadas en tu linaje."),
+            ("Me cuesta poner límites, incluso si me hacen daño.", "Podría reflejar patrones de sumisión heredados."),
+            ("Siento culpa al priorizarme.", "La autoexigencia puede estar epigenéticamente reforzada.")
+        ],
+        "Línea Paterna": [
+            ("Siento que debo ser fuerte y no mostrar emociones.", "Puede ser eco de hombres fríos o ausentes en tu historia."),
+            ("Tengo miedo al fracaso o a decepcionar.", "La presión por el logro puede venir de exigencias masculinas anteriores."),
+            ("Me cuesta confiar o mostrar vulnerabilidad.", "El rechazo a la emocionalidad puede ser aprendido desde generaciones pasadas.")
+        ]
+    }
+
+    for linea, items in lineas.items():
+        st.subheader(f"🔹 {linea}")
+        for idx, (texto, explicacion) in enumerate(items):
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                st.slider(texto, 1, 3, key=f"{linea}_{idx}")
+            with col2:
+                with st.expander("❓"):
+                    st.caption(explicacion)
+
+    if st.button("✅ Finalizar evaluación epigenética"):
+        st.success("Tus respuestas han sido registradas.")
+
+# ---- MODULO: Condiciones Clínicas ----
 def ejecutar_test_condiciones_clinicas():
     st.title("🧬 MBI 360° – Módulo 3: Condiciones Clínicas Opcionales")
     st.markdown("Evalúa tu estado físico a través de síntomas relacionados con metabolismo, digestión, inflamación, hormonas, inmunidad y salud neuropsicológica.")
@@ -50,28 +101,20 @@ def ejecutar_test_condiciones_clinicas():
         ]
     }
 
-    resultados = {}
     for categoria, items in afirmaciones.items():
         st.subheader(f"🔹 {categoria}")
         for idx, (texto, explicacion) in enumerate(items):
             col1, col2 = st.columns([4, 1])
             with col1:
-                seleccion = st.radio(texto, [1, 2, 3], key=f"{categoria}_{idx}")
-                resultados[f"{categoria}_{idx}"] = seleccion
+                st.radio(texto, [1, 2, 3], key=f"{categoria}_{idx}")
             with col2:
                 with st.expander("❓"):
                     st.caption(explicacion)
 
     if st.button("✅ Finalizar evaluación"):
-        st.success("Tus respuestas han sido registradas. Pronto podrás descargar el informe personalizado.")
-
+        st.success("Tus respuestas han sido registradas.")
 
 # ---- APP PRINCIPAL ----
-
-from modulo_disociacion import ejecutar_test_disociacion
-from modulo_epigenetico import ejecutar_test_epigenetico
-from modulo_condiciones import ejecutar_test_condiciones_clinicas
-
 st.set_page_config(page_title="MBI 360°", page_icon="🌀", layout="centered")
 
 st.title("🌀 MBI 360° – Evaluación Integral del Ser")
